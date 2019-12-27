@@ -77,7 +77,7 @@ def train(net, criterion, optimizer, train_loader, val_loader, args):
 			torch.save(net.state_dict(), 'models/model'.format(ep, args.freeze_bert))
 
 if __name__ == "__main__":
-	#Get the parameters from arguments
+	#Get the parameters from arguments if used
 	parser = ArgumentParser()
 	parser.add_argument('-freeze_bert', action='store_true')
 	parser.add_argument('-maxlen', type = int, default= 25)
@@ -86,7 +86,6 @@ if __name__ == "__main__":
 	parser.add_argument('-print_every', type = int, default= 100)
 	parser.add_argument('-num_eps', type = int, default= 5)
 	args = parser.parse_args()
-	print(args)
 	#Instantiate the classifier model
 	net = SentimentClassifier(args.freeze_bert)
 	#CPU or GPU
