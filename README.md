@@ -1,11 +1,11 @@
 # Sentiment Analysis
 
-## Train the network
+## Train network
 ```
 python3 train.py
 ```
 
-## Evaluate the network
+## Evaluate network
 ```
 python3 evaluate.py
 ```
@@ -25,8 +25,7 @@ python3 server.py
 npm install
 ```
 
-### Run client
+## Run client
 ```
 npm run serve
 ```
-
