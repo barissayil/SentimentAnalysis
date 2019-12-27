@@ -20,7 +20,7 @@ python3 analyze.py
 python3 server.py
 ```
 
-## Client setup
+## Setup client
 ```
 cd client
 npm install
