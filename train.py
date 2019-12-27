@@ -74,7 +74,7 @@ def train(net, criterion, optimizer, train_loader, val_loader, args):
 			#Set the current validation accuracy as the best one
 			best_acc = val_acc
 			#Save the current network's state dictionary
-			torch.save(net.state_dict(), 'models/sstcls_{}_freeze_{}.dat'.format(ep, args.freeze_bert))
+			torch.save(net.state_dict(), 'models/model'.format(ep, args.freeze_bert))
 
 if __name__ == "__main__":
 	#Get the parameters from arguments

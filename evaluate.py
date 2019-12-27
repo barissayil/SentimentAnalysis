@@ -18,7 +18,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 #Put the network to the GPU if available
 net = net.to(device)
 #Load the state dictionary of the network
-net.load_state_dict(torch.load('./models/classifier', map_location=device))
+net.load_state_dict(torch.load('./models/model', map_location=device))
 #Takes as the input the logits of the positive class and computes the binary cross-entropy 
 criterion = nn.BCEWithLogitsLoss()
 

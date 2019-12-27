@@ -21,7 +21,7 @@ net = net.to(device)
 #Instantiate the bert tokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 #Load the state dictionary of the network
-net.load_state_dict(torch.load('./models/classifier', map_location=device))
+net.load_state_dict(torch.load('./models/model', map_location=device))
 
 def classify_sentiment(sentence):
 	with torch.no_grad():
