@@ -1,6 +1,6 @@
 # Sentiment Analysis
 
-Sentiment analysis neural network trained by fine tuning BERT on the Stanford Sentiment Treebank.
+Sentiment analysis neural network trained by fine tuning [BERT](https://arxiv.org/pdf/1810.04805.pdf) on the [Stanford Sentiment Treebank](https://nlp.stanford.edu/sentiment/).
 
 ## Train network
 ```
