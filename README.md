@@ -2,6 +2,11 @@
 
 Sentiment analysis neural network trained by fine tuning [BERT](https://arxiv.org/pdf/1810.04805.pdf) on the [Stanford Sentiment Treebank](https://nlp.stanford.edu/sentiment/).
 
+## Install requirements
+```
+pip3 install -r requirements.txt
+```
+
 ## Train network
 ```
 python3 train.py
