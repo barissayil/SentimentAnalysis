@@ -22,10 +22,12 @@ python3 server.py
 
 ## Client setup
 ```
+cd client
 npm install
 ```
 
 ## Run client
 ```
+cd client
 npm run serve
 ```
