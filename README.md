@@ -1,5 +1,7 @@
 # Sentiment Analysis
 
+Sentiment analysis neural network trained by fine tuning BERT on the Stanford Sentiment Treebank.
+
 ## Train network
 ```
 python3 train.py
