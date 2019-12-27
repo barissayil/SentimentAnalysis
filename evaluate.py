@@ -54,5 +54,6 @@ def evaluate(net, criterion, dataloader):
 	#Return accuracy and loss
 	return mean_acc / count, mean_loss / count
 
+#Get validation accuracy and validation loss
 val_acc, val_loss = evaluate(net, criterion, val_loader)
 print("Validation Accuracy : {}, Validation Loss : {}".format(val_acc, val_loss))
