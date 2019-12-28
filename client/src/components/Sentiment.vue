@@ -27,8 +27,6 @@ export default {
 					text: this.text
 				}
 			}).then((res)=>{
-				console.log(res);
-				console.log(res.data);
 				if (this.text == ""){
 					this.reply = false;
 				} else {
