@@ -5,11 +5,11 @@ from transformers import BertModel
 class SentimentClassifier(nn.Module):
     def __init__(self, freeze_bert = True):
         super(SentimentClassifier, self).__init__()
-        #Instantiate BERT model object as the bert layer of the classifier
+        #Instantiate BERT model object as the BERT layer of the classifier
         self.bert_layer = BertModel.from_pretrained('bert-base-uncased')
-        #Freeze bert layers if needed
+        #Freeze BERT layers if needed
         if freeze_bert:
-            #For all the paramaters of the bert layers
+            #For all the paramaters of the BERT layer
             for p in self.bert_layer.parameters():
                 #Don't track their gradient since we won't modify them
                 p.requires_grad = False
