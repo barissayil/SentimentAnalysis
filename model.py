@@ -3,7 +3,7 @@ import torch.nn as nn
 from transformers import BertModel
 
 class SentimentClassifier(nn.Module):
-    def __init__(self, freeze_bert = True):
+    def __init__(self, freeze_bert = False):
         super(SentimentClassifier, self).__init__()
         #Instantiate BERT model object as the BERT layer of the classifier
         self.bert_layer = BertModel.from_pretrained('bert-base-uncased')

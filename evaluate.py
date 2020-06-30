@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
+from tqdm import tqdm
 from transformers import BertTokenizer, BertModel
-import pandas as pd
 from model import SentimentClassifier
 from dataset import SSTDataset
 
@@ -11,14 +11,14 @@ from dataset import SSTDataset
 val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = 30)
 #Create validation dataloader
 val_loader = DataLoader(val_set, batch_size = 64, num_workers = 5)
-#Create the network
-net = SentimentClassifier()
+#Create the model
+model = SentimentClassifier()
 #CPU or GPU
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-#Put the network to the GPU if available
-net = net.to(device)
-#Load the state dictionary of the network
-net.load_state_dict(torch.load('./models/model', map_location=device))
+#Put the model to the GPU if available
+model = model.to(device)
+#Load the state dictionary of the model
+model.load_state_dict(torch.load('./models/model', map_location=device))
 #Takes as the input the logits of the positive class and computes the binary cross-entropy 
 criterion = nn.BCEWithLogitsLoss()
 
@@ -32,19 +32,19 @@ def get_accuracy_from_logits(logits, labels):
 	#Return the accuracy
 	return acc
 
-def evaluate(net, criterion, dataloader):
-	#Set net to evaluation mode
-	net.eval()
+def evaluate(model, criterion, dataloader):
+	#Set model to evaluation mode
+	model.eval()
 	#Set mean accuracy, mean loss, and count to zero
 	mean_acc, mean_loss, count = 0, 0, 0
 	#We won't track the gradients since we're evaluating the model, not training it
 	with torch.no_grad():
 		#Get the sequence, attention masks, and labels from the dataloader
-		for seq, attn_masks, labels in dataloader:
+		for seq, attn_masks, labels in tqdm(dataloader, desc="Evaluating"):
 			#Put the sequence, attention masks, and labels to the GPU, if available
 			seq, attn_masks, labels = seq.to(device), attn_masks.to(device), labels.to(device)
-			#Get the logits from the network
-			logits = net(seq, attn_masks)
+			#Get the logits from the model
+			logits = model(seq, attn_masks)
 			#Calculate the mean loss using logits and labels
 			mean_loss += criterion(logits.squeeze(-1), labels.float()).item()
 			#Calculate the man accuracy using logits and labels
@@ -55,5 +55,5 @@ def evaluate(net, criterion, dataloader):
 	return mean_acc / count, mean_loss / count
 
 #Get validation accuracy and validation loss
-val_acc, val_loss = evaluate(net, criterion, val_loader)
+val_acc, val_loss = evaluate(model, criterion, val_loader)
 print("Validation Accuracy : {}, Validation Loss : {}".format(val_acc, val_loss))

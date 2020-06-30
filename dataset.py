@@ -1,7 +1,7 @@
+import pandas as pd
 import torch
 from torch.utils.data import Dataset
 from transformers import BertTokenizer
-import pandas as pd
 
 class SSTDataset(Dataset):
 	"""
@@ -13,10 +13,6 @@ class SSTDataset(Dataset):
 	def __init__(self, filename, maxlen): 
 		#Store the contents of the file in a pandas dataframe
 		self.df = pd.read_csv(filename, delimiter = '\t')
-		#Print the filename and the dataframe to take a look
-		print(filename)
-		print(self.df)
-		print()
 		#Initialize the BERT tokenizer
 		self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 		#Maximum length of the tokens list to keep all the sequences of fixed size

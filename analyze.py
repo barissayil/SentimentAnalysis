@@ -4,14 +4,14 @@ from model import SentimentClassifier
 
 print('Please wait while the analyser is being prepared.')
 
-#Create the network with keeping bert layers unfrozen
-net = SentimentClassifier(freeze_bert = False)
+#Create the model
+model = SentimentClassifier()
 #CPU or GPU
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-#Put the network to the GPU if available
-net = net.to(device)
-#Load the state dictionary of the network that I've trained
-net.load_state_dict(torch.load('./models/model', map_location=device))
+#Put the model to the GPU if available
+model = model.to(device)
+#Load the state dictionary of the model that I've trained
+model.load_state_dict(torch.load('./models/model', map_location=device))
 #Bert tokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
@@ -23,7 +23,7 @@ def classify_sentiment(sentence):
 		seq = torch.tensor(tokens_ids)
 		seq = seq.unsqueeze(0)
 		attn_mask = (seq != 0).long()
-		logit = net(seq, attn_mask)
+		logit = model(seq, attn_mask)
 		prob = torch.sigmoid(logit.unsqueeze(-1))
 		prob = prob.item()
 		soft_prob = prob > 0.5
