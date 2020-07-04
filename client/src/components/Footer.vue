@@ -2,9 +2,9 @@
 	<div class="footer">
   	<ul>
 			Baris Sayil
-			<li><a href="https://twitter.com/barissayil">Twitter</a></li>
-			<li><a href="mailto:baris.sayil@insa-lyon.fr">Email</a></li>
 			<li><a href="https://github.com/barissayil">Github</a></li>
+			<li><a href="https://www.linkedin.com/in/barissayil/">LinkedIn</a></li>
+			<li><a href="mailto:baris.sayil@insa-lyon.fr">Email</a></li>
   	</ul>
 	</div>
 </template>

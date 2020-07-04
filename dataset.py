@@ -1,7 +1,7 @@
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
-from transformers import BertTokenizer
+from transformers import AutoTokenizer
 
 class SSTDataset(Dataset):
 	"""
@@ -10,11 +10,11 @@ class SSTDataset(Dataset):
 	Richard Socher, Alex Perelygin, Jean Wu, Jason Chuang, Christopher Manning, Andrew Ng and Christopher Potts
 	Conference on Empirical Methods in Natural Language Processing (EMNLP 2013)
 	"""
-	def __init__(self, filename, maxlen): 
+	def __init__(self, filename, maxlen, model_name='bert-base-uncased'): 
 		#Store the contents of the file in a pandas dataframe
 		self.df = pd.read_csv(filename, delimiter = '\t')
-		#Initialize the BERT tokenizer
-		self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+		#Initialize the tokenizer for the desired transformer model
+		self.tokenizer = AutoTokenizer.from_pretrained(model_name)
 		#Maximum length of the tokens list to keep all the sequences of fixed size
 		self.maxlen = maxlen
 
@@ -26,7 +26,7 @@ class SSTDataset(Dataset):
 		#Select the sentence and label at the specified index in the data frame
 		sentence = self.df.loc[index, 'sentence']
 		label = self.df.loc[index, 'label']
-		#Preprocess the text to be suitable for BERT
+		#Preprocess the text to be suitable for the transformer
 		#Tokenize the sentence
 		tokens = self.tokenizer.tokenize(sentence) 
 		#Insert the CLS and SEP token in the beginning and end of the sentence

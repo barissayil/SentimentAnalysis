@@ -1,19 +1,7 @@
 import torch
-from transformers import BertTokenizer
+from transformers import AutoTokenizer
 from model import SentimentClassifier
-
-print('Please wait while the analyser is being prepared.')
-
-#Create the model
-model = SentimentClassifier()
-#CPU or GPU
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-#Put the model to the GPU if available
-model = model.to(device)
-#Load the state dictionary of the model that I've trained
-model.load_state_dict(torch.load('./models/model', map_location=device))
-#Bert tokenizer
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+from arguments import args
 
 def classify_sentiment(sentence):
 	with torch.no_grad():
@@ -33,6 +21,17 @@ def classify_sentiment(sentence):
 			print('Negative with probability {}%.'.format(int(100-prob*100)))
 
 if __name__ == "__main__":
+	print('Please wait while the analyser is being prepared.')
+	#Create the model with the desired transformer model
+	model = SentimentClassifier(model_name=args.model_name)
+	#CPU or GPU
+	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+	#Put the model to the GPU if available
+	model = model.to(device)
+	#Load the state dictionary of the model
+	model.load_state_dict(torch.load(f'models/{args.model_name}', map_location=device))
+	#Initialize the tokenizer for the desired transformer model
+	tokenizer = AutoTokenizer.from_pretrained(args.model_name)
 	sentence = input('Input sentiment to analyze: ')
 	while sentence:
 		classify_sentiment(sentence)

@@ -1,5 +1,4 @@
 import os
-from argparse import ArgumentParser
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -8,7 +7,7 @@ from tqdm import tqdm, trange
 from transformers import BertTokenizer, BertModel
 from model import SentimentClassifier
 from dataset import SSTDataset
-
+from arguments import args
 
 
 def get_accuracy_from_logits(logits, labels):
@@ -61,12 +60,6 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 			loss.backward()
 			#Optimization step
 			optimizer.step()
-			#Display the loss and accuracy at fixed intervals
-			if (i + 1) % args.print_every == 0:
-				#Get the accuracy for the current batch using logits and labels
-				acc = get_accuracy_from_logits(logits, labels)
-				#Display the accuracy
-				print("Iteration {} of epoch {} complete. Loss : {} Accuracy : {}".format(i, epoch, loss.item(), acc))
 		#Calculate the validation accuracy and loss
 		val_acc, val_loss = evaluate(model, criterion, val_loader)
 		#Display the validation accuracy and loss
@@ -78,23 +71,15 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 			#Set the current validation accuracy as the best one
 			best_acc = val_acc
 			#Save the current model's state dictionary
-			torch.save(model.state_dict(), 'models/model')
+			torch.save(model.state_dict(), f'models/{args.model_name}')
 
 if __name__ == "__main__":
-	#Get the parameters from arguments if used
-	parser = ArgumentParser()
-	parser.add_argument('-freeze_bert', action='store_true')
-	parser.add_argument('-maxlen', type = int, default= 25)
-	parser.add_argument('-batch_size', type = int, default= 32)
-	parser.add_argument('-lr', type = float, default = 2e-5)
-	parser.add_argument('-print_every', type = int, default= 1000)
-	parser.add_argument('-num_eps', type = int, default= 5)
-	args = parser.parse_args()
+
 	#Create the model directory if it doesn't exist
 	if not os.path.exists('models'):
 		os.makedirs('models')
-	#Create the model with frozen bert layers if wanted
-	model = SentimentClassifier(args.freeze_bert)
+	#Create the model with the desired transformer model
+	model = SentimentClassifier(model_name=args.model_name)
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	#Put the model to the GPU if available
@@ -104,10 +89,10 @@ if __name__ == "__main__":
 	#Adam optimizer
 	optimizer = optim.Adam(model.parameters(), lr = args.lr)
 	#Create instances of training and validation set
-	train_set = SSTDataset(filename = 'data/train.tsv', maxlen = args.maxlen)
-	val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = args.maxlen)
+	train_set = SSTDataset(filename = 'data/train.tsv', maxlen = args.maxlen, model_name=args.model_name)
+	val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = args.maxlen, model_name=args.model_name)
 	#Create intsances of training and validation dataloaders
-	train_loader = DataLoader(train_set, batch_size = args.batch_size, num_workers = 5)
-	val_loader = DataLoader(val_set, batch_size = args.batch_size, num_workers = 5)
+	train_loader = DataLoader(train_set, batch_size = args.batch_size, num_workers = args.num_threads)
+	val_loader = DataLoader(val_set, batch_size = args.batch_size, num_workers = args.num_threads)
 	#Train the model
 	train(model, criterion, optimizer, train_loader, val_loader, args)

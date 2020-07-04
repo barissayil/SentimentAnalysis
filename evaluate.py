@@ -1,26 +1,11 @@
 import torch
 import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import BertTokenizer, BertModel
 from model import SentimentClassifier
 from dataset import SSTDataset
+from arguments import args
 
-#Create validation set
-val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = 30)
-#Create validation dataloader
-val_loader = DataLoader(val_set, batch_size = 64, num_workers = 5)
-#Create the model
-model = SentimentClassifier()
-#CPU or GPU
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-#Put the model to the GPU if available
-model = model.to(device)
-#Load the state dictionary of the model
-model.load_state_dict(torch.load('./models/model', map_location=device))
-#Takes as the input the logits of the positive class and computes the binary cross-entropy 
-criterion = nn.BCEWithLogitsLoss()
 
 def get_accuracy_from_logits(logits, labels):
 	#Get a tensor of shape [B, 1, 1] with probabilities that the sentiment is positive
@@ -54,6 +39,21 @@ def evaluate(model, criterion, dataloader):
 	#Return accuracy and loss
 	return mean_acc / count, mean_loss / count
 
-#Get validation accuracy and validation loss
-val_acc, val_loss = evaluate(model, criterion, val_loader)
-print("Validation Accuracy : {}, Validation Loss : {}".format(val_acc, val_loss))
+if __name__ == "__main__":
+	#Create validation set
+	val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = 30)
+	#Create validation dataloader
+	val_loader = DataLoader(val_set, batch_size = 64, num_workers = args.num_threads)
+	#Create the model with the desired transformer model
+	model = SentimentClassifier(model_name=args.model_name)
+	#CPU or GPU
+	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+	#Put the model to the GPU if available
+	model = model.to(device)
+	#Load the state dictionary of the model
+	model.load_state_dict(torch.load(f'models/{args.model_name}', map_location=device))
+	#Takes as the input the logits of the positive class and computes the binary cross-entropy 
+	criterion = nn.BCEWithLogitsLoss()
+	#Get validation accuracy and validation loss
+	val_acc, val_loss = evaluate(model, criterion, val_loader)
+	print("Validation Accuracy : {}, Validation Loss : {}".format(val_acc, val_loss))
