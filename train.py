@@ -2,10 +2,10 @@ import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import  DataLoader
 from tqdm import tqdm, trange
-from transformers import BertTokenizer, BertModel
-from model import SentimentClassifier
+from transformers import AutoConfig
+from modeling import BertForSentimentClassification, AlbertForSentimentClassification
 from dataset import SSTDataset
 from arguments import args
 
@@ -47,6 +47,7 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 	#Set best accuracy to zero
 	best_acc = 0
 	for epoch in trange(args.num_eps, desc="Epoch"):
+		model.train()
 		for i, (seq, attn_masks, labels) in enumerate(tqdm(train_loader, desc="Training")):
 			#Clear gradients
 			optimizer.zero_grad()  
@@ -70,16 +71,21 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 			print("Best validation accuracy improved from {} to {}, saving model...".format(best_acc, val_acc))
 			#Set the current validation accuracy as the best one
 			best_acc = val_acc
-			#Save the current model's state dictionary
-			torch.save(model.state_dict(), f'models/{args.model_name}')
+			#Save the model
+			model.save_pretrained(f'models/{args.model_name}/')
 
 if __name__ == "__main__":
 
 	#Create the model directory if it doesn't exist
 	if not os.path.exists('models'):
 		os.makedirs('models')
+	#Config
+	config = AutoConfig.from_pretrained(args.model_name)
 	#Create the model with the desired transformer model
-	model = SentimentClassifier(model_name=args.model_name)
+	if args.model_type == 'bert':
+		model = BertForSentimentClassification.from_pretrained(args.model_name, config=config)
+	elif args.model_type == 'albert':
+		model = AlbertForSentimentClassification.from_pretrained(args.model_name, config=config)
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	#Put the model to the GPU if available

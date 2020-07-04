@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from model import SentimentClassifier
+from modeling import BertForSentimentClassification, AlbertForSentimentClassification
 from dataset import SSTDataset
 from arguments import args
 
@@ -45,13 +45,14 @@ if __name__ == "__main__":
 	#Create validation dataloader
 	val_loader = DataLoader(val_set, batch_size = 64, num_workers = args.num_threads)
 	#Create the model with the desired transformer model
-	model = SentimentClassifier(model_name=args.model_name)
+	if args.model_type == 'bert':
+		model = BertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
+	elif args.model_type == 'albert':
+		model = AlbertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	#Put the model to the GPU if available
 	model = model.to(device)
-	#Load the state dictionary of the model
-	model.load_state_dict(torch.load(f'models/{args.model_name}', map_location=device))
 	#Takes as the input the logits of the positive class and computes the binary cross-entropy 
 	criterion = nn.BCEWithLogitsLoss()
 	#Get validation accuracy and validation loss
