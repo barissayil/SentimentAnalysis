@@ -41,7 +41,7 @@ def evaluate(model, criterion, dataloader):
 
 if __name__ == "__main__":
 	#Create validation set
-	val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = 30)
+	val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = args.maxlen, model_name=args.model_name)
 	#Create validation dataloader
 	val_loader = DataLoader(val_set, batch_size = 64, num_workers = args.num_threads)
 	#Create the model with the desired transformer model
