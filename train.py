@@ -17,13 +17,13 @@ def get_accuracy_from_logits(logits, labels):
 	preds = (probs > 0.5).long()
 	#Check which predictions are the same as the ground truth and calculate the accuracy
 	acc = (preds.squeeze() == labels).float().mean()
-	#Return the accuracy
+
 	return acc
 
 def evaluate(model, criterion, dataloader):
-	#Set model to evaluation mode
+
 	model.eval()
-	#Set mean accuracy, mean loss, and count to zero
+
 	mean_acc, mean_loss, count = 0, 0, 0
 	#We won't track the gradients since we're evaluating the model, not training it
 	with torch.no_grad():
@@ -37,14 +37,13 @@ def evaluate(model, criterion, dataloader):
 			mean_loss += criterion(logits.squeeze(-1), labels.float()).item()
 			#Calculate the man accuracy using logits and labels
 			mean_acc += get_accuracy_from_logits(logits, labels)
-			#Increment the count
+
 			count += 1
 	#Return accuracy and loss
 	return mean_acc / count, mean_loss / count
 
 def train(model, criterion, optimizer, train_loader, val_loader, args):
 
-	#Set best accuracy to zero
 	best_acc = 0
 	for epoch in trange(args.num_eps, desc="Epoch"):
 		model.train()
@@ -55,7 +54,7 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 			seq, attn_masks, labels = seq.to(device), attn_masks.to(device), labels.to(device)
 			#Obtain the logits from the model
 			logits = model(seq, attn_masks)
-			#Compute loss loss
+			#Compute loss
 			loss = criterion(logits.squeeze(-1), labels.float())
 			#Backpropagate the gradients
 			loss.backward()
@@ -79,7 +78,7 @@ if __name__ == "__main__":
 	#Create the model directory if it doesn't exist
 	if not os.path.exists('models'):
 		os.makedirs('models')
-	#Config
+	#Configuration for the desired transformer model
 	config = AutoConfig.from_pretrained(args.model_name)
 	#Create the model with the desired transformer model
 	if args.model_type == 'bert':
@@ -92,13 +91,13 @@ if __name__ == "__main__":
 	model = model.to(device)
 	#Takes as the input the logits of the positive class and computes the binary cross-entropy 
 	criterion = nn.BCEWithLogitsLoss()
-	#Adam optimizer
+
 	optimizer = optim.Adam(model.parameters(), lr = args.lr)
-	#Create instances of training and validation set
-	train_set = SSTDataset(filename = 'data/train.tsv', maxlen = args.maxlen, model_name=args.model_name)
-	val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = args.maxlen, model_name=args.model_name)
-	#Create intsances of training and validation dataloaders
+	
+	train_set = SSTDataset(filename = 'data/train.tsv', maxlen = args.maxlen_train, model_name=args.model_name)
+	val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = args.maxlen_val, model_name=args.model_name)
+
 	train_loader = DataLoader(train_set, batch_size = args.batch_size, num_workers = args.num_threads)
 	val_loader = DataLoader(val_set, batch_size = args.batch_size, num_workers = args.num_threads)
-	#Train the model
+
 	train(model, criterion, optimizer, train_loader, val_loader, args)

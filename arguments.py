@@ -2,7 +2,8 @@ from argparse import ArgumentParser
 
 parser = ArgumentParser()
 
-parser.add_argument('--maxlen', type=int, default=30)
+parser.add_argument('--maxlen_train', type=int, default=30)
+parser.add_argument('--maxlen_val', type=int, default=50)
 parser.add_argument('--batch_size', type=int, default=32)
 parser.add_argument('--lr', type=float, default=2e-5)
 parser.add_argument('--num_eps', type=int, default=2)

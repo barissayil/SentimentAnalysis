@@ -14,13 +14,13 @@ def get_accuracy_from_logits(logits, labels):
 	soft_probs = (probs > 0.5).long()
 	#Check which predictions are the same as the ground truth and calculate the accuracy
 	acc = (soft_probs.squeeze() == labels).float().mean()
-	#Return the accuracy
+
 	return acc
 
 def evaluate(model, criterion, dataloader):
-	#Set model to evaluation mode
+
 	model.eval()
-	#Set mean accuracy, mean loss, and count to zero
+
 	mean_acc, mean_loss, count = 0, 0, 0
 	#We won't track the gradients since we're evaluating the model, not training it
 	with torch.no_grad():
@@ -34,14 +34,14 @@ def evaluate(model, criterion, dataloader):
 			mean_loss += criterion(logits.squeeze(-1), labels.float()).item()
 			#Calculate the man accuracy using logits and labels
 			mean_acc += get_accuracy_from_logits(logits, labels)
-			#Increment the count
+
 			count += 1
 	#Return accuracy and loss
 	return mean_acc / count, mean_loss / count
 
 if __name__ == "__main__":
 	#Create validation set
-	val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = args.maxlen, model_name=args.model_name)
+	val_set = SSTDataset(filename = 'data/dev.tsv', maxlen = args.maxlen_val, model_name=args.model_name)
 	#Create validation dataloader
 	val_loader = DataLoader(val_set, batch_size = 64, num_workers = args.num_threads)
 	#Create the model with the desired transformer model

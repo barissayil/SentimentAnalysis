@@ -5,9 +5,9 @@ from transformers import BertPreTrainedModel, BertModel, AlbertPreTrainedModel, 
 class BertForSentimentClassification(BertPreTrainedModel):
 	def __init__(self, config):
 		super().__init__(config)
-		#Instantiate BERT model object as the BERT layer of the classifier
+
 		self.bert = BertModel(config)
-		#Instantiate the classification layer
+		#The classification layer that takes the [CLS] representation and outputs the logit
 		self.cls_layer = nn.Linear(768, 1)
 
 	def forward(self, seq, attn_masks):
@@ -19,19 +19,19 @@ class BertForSentimentClassification(BertPreTrainedModel):
 		'''
 		#Feed the input to BERT model to obtain contextualized representations
 		reps, _ = self.bert(seq, attention_mask = attn_masks)
-		#Obtain the representation of [CLS] head
-		cls_rep = reps[:, 0]
-		#Feed cls_rep to the classifier layer to get logits
-		logits = self.cls_layer(cls_rep)
-		#Return logits
+		#Obtain the representations of [CLS] heads
+		cls_reps = reps[:, 0]
+		
+		logits = self.cls_layer(cls_reps)
+	
 		return logits
 
 class AlbertForSentimentClassification(AlbertPreTrainedModel):
 	def __init__(self, config):
 		super().__init__(config)
-		#Instantiate 	ALBERT model object as the BERT layer of the classifier
+
 		self.albert = AlbertModel(config)
-		#Instantiate the classification layer
+		#The classification layer that takes the [CLS] representation and outputs the logit
 		self.cls_layer = nn.Linear(768, 1)
 
 	def forward(self, seq, attn_masks):
@@ -43,9 +43,9 @@ class AlbertForSentimentClassification(AlbertPreTrainedModel):
 		'''
 		#Feed the input to ALBERT model to obtain contextualized representations
 		reps, _ = self.albert(seq, attention_mask = attn_masks)
-		#Obtain the representation of [CLS] head
-		cls_rep = reps[:, 0]
-		#Feed cls_rep to the classifier layer to get logits
-		logits = self.cls_layer(cls_rep)
-		#Return logits
+		#Obtain the representations of [CLS] heads
+		cls_reps = reps[:, 0]
+		
+		logits = self.cls_layer(cls_reps)
+	
 		return logits
