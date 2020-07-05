@@ -1,6 +1,6 @@
 import torch
 from transformers import AutoTokenizer
-from modeling import BertForSentimentClassification, AlbertForSentimentClassification
+from modeling import BertForSentimentClassification, AlbertForSentimentClassification, DistilBertForSentimentClassification
 from arguments import args
 
 def classify_sentiment(sentence):
@@ -27,6 +27,8 @@ if __name__ == "__main__":
 		model = BertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
 	elif args.model_type == 'albert':
 		model = AlbertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
+	elif args.model_type == 'distilbert':
+		model = DistilBertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	#Put the model to the GPU if available
