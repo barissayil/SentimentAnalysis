@@ -12,7 +12,7 @@ from arguments import args
 
 def train(model, criterion, optimizer, train_loader, val_loader, args):
 	best_acc = 0
-	for epoch in trange(total=args.num_eps, desc="Epoch"):
+	for epoch in trange(args.num_eps, desc="Epoch"):
 		model.train()
 		for i, (input_ids, attention_mask, labels) in enumerate(tqdm(iterable=train_loader, desc="Training")):
 			optimizer.zero_grad()  
@@ -21,7 +21,7 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 			loss = criterion(input=logits.squeeze(-1), target=labels.float())
 			loss.backward()
 			optimizer.step()
-		val_acc, val_loss = evaluate(model=model, criterion=criterion, dataloader=val_loader)
+		val_acc, val_loss = evaluate(model=model, criterion=criterion, dataloader=val_loader, device=device)
 		print("Epoch {} complete! Validation Accuracy : {}, Validation Loss : {}".format(epoch, val_acc, val_loss))
 		if val_acc > best_acc:
 			print("Best validation accuracy improved from {} to {}, saving model...".format(best_acc, val_acc))
@@ -56,5 +56,5 @@ if __name__ == "__main__":
 
 	train_loader = DataLoader(dataset=train_set, batch_size=args.batch_size, num_workers=args.num_threads)
 	val_loader = DataLoader(dataset=val_set, batch_size=args.batch_size, num_workers=args.num_threads)
-	
+
 	train(model=model, criterion=criterion, optimizer=optimizer, train_loader=train_loader, val_loader=val_loader, args=args)

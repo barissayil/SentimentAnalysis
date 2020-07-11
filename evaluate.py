@@ -16,7 +16,7 @@ def get_accuracy_from_logits(logits, labels):
 	acc = (soft_probs.squeeze() == labels).float().mean()
 	return acc
 
-def evaluate(model, criterion, dataloader):
+def evaluate(model, criterion, dataloader, device):
 	model.eval()
 	mean_acc, mean_loss, count = 0, 0, 0
 	with torch.no_grad():
@@ -43,5 +43,5 @@ if __name__ == "__main__":
 	model = model.to(device)
 	#Takes as the input the logits of the positive class and computes the binary cross-entropy 
 	criterion = nn.BCEWithLogitsLoss()
-	val_acc, val_loss = evaluate(model=model, criterion=criterion, dataloader=val_loader)
+	val_acc, val_loss = evaluate(model=model, criterion=criterion, dataloader=val_loader, device=device)
 	print("Validation Accuracy : {}, Validation Loss : {}".format(val_acc, val_loss))
