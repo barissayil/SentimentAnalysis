@@ -29,8 +29,7 @@ def evaluate(model, criterion, dataloader, device):
 	return mean_acc / count, mean_loss / count
 
 if __name__ == "__main__":
-	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, model_name=args.model_name)
-	val_loader = DataLoader(dataset=val_set, batch_size=args.batch_size, num_workers=args.num_threads)
+	
 	#Create the model with the desired transformer model
 	if args.model_type == 'bert':
 		model = BertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
@@ -38,10 +37,16 @@ if __name__ == "__main__":
 		model = AlbertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
 	elif args.model_type == 'distilbert':
 		model = DistilBertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
+
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	model = model.to(device)
+
 	#Takes as the input the logits of the positive class and computes the binary cross-entropy 
 	criterion = nn.BCEWithLogitsLoss()
+
+	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, model_name=args.model_name)
+	val_loader = DataLoader(dataset=val_set, batch_size=args.batch_size, num_workers=args.num_threads)
+	
 	val_acc, val_loss = evaluate(model=model, criterion=criterion, dataloader=val_loader, device=device)
 	print("Validation Accuracy : {}, Validation Loss : {}".format(val_acc, val_loss))

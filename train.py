@@ -30,9 +30,6 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 
 if __name__ == "__main__":
 
-	# #Create the model directory if it doesn't exist
-	# if not os.path.exists('models'):######Necessary?
-	# 	os.makedirs('models')
 	#Configuration for the desired transformer model
 	config = AutoConfig.from_pretrained(args.model_name)
 	#Create the model with the desired transformer model
@@ -42,10 +39,12 @@ if __name__ == "__main__":
 		model = AlbertForSentimentClassification.from_pretrained(args.model_name, config=config)
 	elif args.model_type == 'distilbert':
 		model = DistilBertForSentimentClassification.from_pretrained(args.model_name, config=config)
+		
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	#Put the model to the GPU if available
 	model = model.to(device)
+
 	#Takes as the input the logits of the positive class and computes the binary cross-entropy 
 	criterion = nn.BCEWithLogitsLoss()
 
