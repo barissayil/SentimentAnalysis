@@ -19,7 +19,6 @@ class SSTDataset(Dataset):
 		self.maxlen = maxlen
 
 	def __len__(self):
-		#Return the number of data points present in the dataset
 		return len(self.df)
 
 	def __getitem__(self, index):    
@@ -27,22 +26,15 @@ class SSTDataset(Dataset):
 		sentence = self.df.loc[index, 'sentence']
 		label = self.df.loc[index, 'label']
 		#Preprocess the text to be suitable for the transformer
-		#Tokenize the sentence
 		tokens = self.tokenizer.tokenize(sentence) 
-		#Insert the CLS and SEP token in the beginning and end of the sentence
 		tokens = ['[CLS]'] + tokens + ['[SEP]'] 
-		#Check if tokens list is smaller than or bigger than (or equal to) the maximum allowed size
 		if len(tokens) < self.maxlen:
-			#Padd sentences
 			tokens = tokens + ['[PAD]' for _ in range(self.maxlen - len(tokens))] 
 		else:
-			#Prun the list to be of specified max length
 			tokens = tokens[:self.maxlen-1] + ['[SEP]'] 
 		#Obtain the indices of the tokens in the BERT Vocabulary
-		tokens_ids = self.tokenizer.convert_tokens_to_ids(tokens) 
-		#Convert the list to a pytorch tensor
-		seq = torch.tensor(tokens_ids) 
+		input_ids = self.tokenizer.convert_tokens_to_ids(tokens) 
+		input_ids = torch.tensor(input_ids) 
 		#Obtain the attention mask i.e a tensor containing 1s for no padded tokens and 0s for padded ones
-		attn_mask = (seq != 0).long()
-		#Return sequence, attention mask, and label
-		return seq, attn_mask, label
+		attention_mask = (input_ids != 0).long()
+		return input_ids, attention_mask, label

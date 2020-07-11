@@ -6,7 +6,6 @@ from transformers import AutoTokenizer
 from modeling import BertForSentimentClassification, AlbertForSentimentClassification, DistilBertForSentimentClassification
 from arguments import args
 
-# Instantiate the app
 app = Flask(__name__)
 app.config.from_object(__name__)
 # Enable CORS
@@ -46,8 +45,9 @@ if __name__ == '__main__':
 		model = DistilBertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-	#Put the model to the GPU if available
 	model = model.to(device)
+	
+	model.eval()
 	#Initialize the tokenizer for the desired transformer model
 	tokenizer = AutoTokenizer.from_pretrained(args.model_name)
 	#Run the Flask App
