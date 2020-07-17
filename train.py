@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import  DataLoader
 from tqdm import tqdm, trange
-from transformers import AutoConfig
+from transformers import AutoConfig, AutoTokenizer
 from modeling import BertForSentimentClassification, AlbertForSentimentClassification, DistilBertForSentimentClassification
 from dataset import SSTDataset
 from evaluate import evaluate
@@ -27,14 +27,18 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 			print("Best validation accuracy improved from {} to {}, saving model...".format(best_acc, val_acc))
 			best_acc = val_acc
 			model.save_pretrained(save_directory=f'models/{args.output_dir}/')
+			config.save_pretrained(save_directory=f'models/{args.output_dir}/')
+			tokenizer.save_pretrained(save_directory=f'models/{args.output_dir}/')
 
 if __name__ == "__main__":
 
 	if args.model_name_or_path is None:
-		raise ValueError('Please specify the model name or path to train: --model_name_or_path {bert-base-uncased, albert-base-v2, distilbert-base-uncased}')
+		args.model_name_or_path = 'bert-base-uncased'
 
 	#Configuration for the desired transformer model
 	config = AutoConfig.from_pretrained(args.model_name_or_path)
+	#Tokenizer for the desired transformer model
+	tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 	
 	#Create the model with the desired transformer model
 	if config.model_type == 'bert':
@@ -43,10 +47,10 @@ if __name__ == "__main__":
 		model = AlbertForSentimentClassification.from_pretrained(args.model_name_or_path, config=config)
 	elif config.model_type == 'distilbert':
 		model = DistilBertForSentimentClassification.from_pretrained(args.model_name_or_path, config=config)
+	else:
+		raise ValueError('This transformer model is not supported yet.')
 		
-	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-	#Put the model to the GPU if available
 	model = model.to(device)
 
 	#Takes as the input the logits of the positive class and computes the binary cross-entropy 
@@ -54,8 +58,8 @@ if __name__ == "__main__":
 
 	optimizer = optim.Adam(params=model.parameters(), lr=args.lr)
 
-	train_set = SSTDataset(filename='data/train.tsv', maxlen=args.maxlen_train, model_name_or_path=args.model_name_or_path)
-	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, model_name_or_path=args.model_name_or_path)
+	train_set = SSTDataset(filename='data/train.tsv', maxlen=args.maxlen_train, tokenizer=tokenizer)
+	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, tokenizer=tokenizer)
 
 	train_loader = DataLoader(dataset=train_set, batch_size=args.batch_size, num_workers=args.num_threads)
 	val_loader = DataLoader(dataset=val_set, batch_size=args.batch_size, num_workers=args.num_threads)

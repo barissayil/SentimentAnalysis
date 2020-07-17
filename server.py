@@ -50,8 +50,9 @@ if __name__ == '__main__':
 		model = AlbertForSentimentClassification.from_pretrained(args.model_name_or_path)
 	elif config.model_type == 'distilbert':
 		model = DistilBertForSentimentClassification.from_pretrained(args.model_name_or_path)
+	else:
+		raise ValueError('This transformer model is not supported yet.')
 
-	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	model = model.to(device)
 	

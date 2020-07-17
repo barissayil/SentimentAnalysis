@@ -32,7 +32,7 @@ def evaluate(model, criterion, dataloader, device):
 if __name__ == "__main__":
 
 	if args.model_name_or_path is None:
-		raise ValueError('Please specify the model name or path to evaluate: --model_name_or_path {models/my_model, barissayil/bert-sentiment-analysis-sst}')
+		args.model_name_or_path = 'barissayil/bert-sentiment-analysis-sst'
 
 	#Configuration for the desired transformer model
 	config = AutoConfig.from_pretrained(args.model_name_or_path)
@@ -44,8 +44,9 @@ if __name__ == "__main__":
 		model = AlbertForSentimentClassification.from_pretrained(args.model_name_or_path)
 	elif config.model_type == 'distilbert':
 		model = DistilBertForSentimentClassification.from_pretrained(args.model_name_or_path)
+	else:
+		raise ValueError('This transformer model is not supported yet.')
 
-	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	model = model.to(device)
 

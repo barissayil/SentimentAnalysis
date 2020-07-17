@@ -10,11 +10,11 @@ class SSTDataset(Dataset):
 	Richard Socher, Alex Perelygin, Jean Wu, Jason Chuang, Christopher Manning, Andrew Ng and Christopher Potts
 	Conference on Empirical Methods in Natural Language Processing (EMNLP 2013)
 	"""
-	def __init__(self, filename, maxlen, model_name_or_path): 
+	def __init__(self, filename, maxlen, tokenizer): 
 		#Store the contents of the file in a pandas dataframe
 		self.df = pd.read_csv(filename, delimiter = '\t')
 		#Initialize the tokenizer for the desired transformer model
-		self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+		self.tokenizer = tokenizer
 		#Maximum length of the tokens list to keep all the sequences of fixed size
 		self.maxlen = maxlen
 
