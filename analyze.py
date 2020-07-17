@@ -22,14 +22,16 @@ def classify_sentiment(sentence):
 
 if __name__ == "__main__":
 	if args.model_name_or_path == '':
-		args.model_name_or_path == 'barissayil/bert-sentiment-analysis-sst'
+		args.model_name_or_path = 'barissayil/bert-sentiment-analysis-sst'
+	#Configuration for the desired transformer model
+	config = AutoConfig.from_pretrained(args.model_name_or_path)
 	print('Please wait while the analyser is being prepared.')
 	#Create the model with the desired transformer model
-	if args.model_type == 'bert':
+	if config.model_type == 'bert':
 		model = BertForSentimentClassification.from_pretrained(args.model_name_or_path)
-	elif args.model_type == 'albert':
+	elif config.model_type == 'albert':
 		model = AlbertForSentimentClassification.from_pretrained(args.model_name_or_path)
-	elif args.model_type == 'distilbert':
+	elif config.model_type == 'distilbert':
 		model = DistilBertForSentimentClassification.from_pretrained(args.model_name_or_path)
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

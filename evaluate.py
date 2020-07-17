@@ -30,16 +30,16 @@ def evaluate(model, criterion, dataloader, device):
 	return mean_acc / count, mean_loss / count
 
 if __name__ == "__main__":
-
 	if args.model_name_or_path == '':
 		raise ValueError('Please specify the model name or path to evaluate: --model_name_or_path {models/my_model, barissayil/bert-sentiment-analysis-sst}')
-
+	#Configuration for the desired transformer model
+	config = AutoConfig.from_pretrained(args.model_name_or_path)
 	#Create the model with the desired transformer model
-	if args.model_type == 'bert':
+	if config.model_type == 'bert':
 		model = BertForSentimentClassification.from_pretrained(args.model_name_or_path)
-	elif args.model_type == 'albert':
+	elif config.model_type == 'albert':
 		model = AlbertForSentimentClassification.from_pretrained(args.model_name_or_path)
-	elif args.model_type == 'distilbert':
+	elif config.model_type == 'distilbert':
 		model = DistilBertForSentimentClassification.from_pretrained(args.model_name_or_path)
 
 	#CPU or GPU

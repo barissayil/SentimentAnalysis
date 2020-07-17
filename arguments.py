@@ -10,6 +10,5 @@ parser.add_argument('--num_eps', type=int, default=2)
 parser.add_argument('--num_threads', type=int, default=1)
 parser.add_argument('--output_dir', type=str, default='my_model')
 parser.add_argument('--model_name_or_path', type=str, default='')
-parser.add_argument('--model_type', type=str, default='bert')
 
 args = parser.parse_args()
