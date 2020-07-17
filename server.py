@@ -40,11 +40,11 @@ if __name__ == '__main__':
 		args.model_name_or_path == 'barissayil/bert-sentiment-analysis-sst'
 	#Create the model with the desired transformer model
 	if args.model_type == 'bert':
-		model = BertForSentimentClassification.from_pretrained(model_name_or_path)
+		model = BertForSentimentClassification.from_pretrained(args.model_name_or_path)
 	elif args.model_type == 'albert':
-		model = AlbertForSentimentClassification.from_pretrained(model_name_or_path)
+		model = AlbertForSentimentClassification.from_pretrained(args.model_name_or_path)
 	elif args.model_type == 'distilbert':
-		model = DistilBertForSentimentClassification.from_pretrained(model_name_or_path)
+		model = DistilBertForSentimentClassification.from_pretrained(args.model_name_or_path)
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	model = model.to(device)
