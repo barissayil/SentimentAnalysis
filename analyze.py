@@ -39,9 +39,9 @@ if __name__ == "__main__":
 		model = DistilBertForSentimentClassification.from_pretrained(args.model_name_or_path)
 	else:
 		raise ValueError('This transformer model is not supported yet.')
-	
-	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-	model = model.to(device)
+
+	# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+	# model = model.to(device)
 	
 	model.eval()
 
