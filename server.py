@@ -36,19 +36,21 @@ def sentiment():
 		return jsonify({'sentiment': sentiment, 'probability': probability})
 
 if __name__ == '__main__':
+	if args.model_name_or_path == '':
+		args.model_name_or_path == 'barissayil/bert-sentiment-analysis-sst'
 	#Create the model with the desired transformer model
 	if args.model_type == 'bert':
-		model = BertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
+		model = BertForSentimentClassification.from_pretrained(model_name_or_path)
 	elif args.model_type == 'albert':
-		model = AlbertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
+		model = AlbertForSentimentClassification.from_pretrained(model_name_or_path)
 	elif args.model_type == 'distilbert':
-		model = DistilBertForSentimentClassification.from_pretrained(f'models/{args.model_name}/')
+		model = DistilBertForSentimentClassification.from_pretrained(model_name_or_path)
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	model = model.to(device)
 	
 	model.eval()
 	#Initialize the tokenizer for the desired transformer model
-	tokenizer = AutoTokenizer.from_pretrained(args.model_name)
+	tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 	#Run the Flask App
 	app.run()

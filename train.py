@@ -26,19 +26,22 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 		if val_acc > best_acc:
 			print("Best validation accuracy improved from {} to {}, saving model...".format(best_acc, val_acc))
 			best_acc = val_acc
-			model.save_pretrained(save_directory=f'models/{args.model_name}/')
+			model.save_pretrained(save_directory=f'models/{args.output_dir}/')
 
 if __name__ == "__main__":
 
+	if args.model_name_or_path == '':
+		raise ValueError('Please specify the model name or path to train: --model_name_or_path {bert-base-uncased, albert-base-v2, distilbert-base-uncased}')
+
 	#Configuration for the desired transformer model
-	config = AutoConfig.from_pretrained(args.model_name)
+	config = AutoConfig.from_pretrained(args.model_name_or_path)
 	#Create the model with the desired transformer model
-	if args.model_type == 'bert':
-		model = BertForSentimentClassification.from_pretrained(args.model_name, config=config)
-	elif args.model_type == 'albert':
-		model = AlbertForSentimentClassification.from_pretrained(args.model_name, config=config)
-	elif args.model_type == 'distilbert':
-		model = DistilBertForSentimentClassification.from_pretrained(args.model_name, config=config)
+	if config.model_type == 'bert':
+		model = BertForSentimentClassification.from_pretrained(args.model_name_or_path, config=config)
+	elif config.model_type == 'albert':
+		model = AlbertForSentimentClassification.from_pretrained(args.model_name_or_path, config=config)
+	elif config.model_type == 'distilbert':
+		model = DistilBertForSentimentClassification.from_pretrained(args.model_name_or_path, config=config)
 		
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -50,8 +53,8 @@ if __name__ == "__main__":
 
 	optimizer = optim.Adam(params=model.parameters(), lr=args.lr)
 
-	train_set = SSTDataset(filename='data/train.tsv', maxlen=args.maxlen_train, model_name=args.model_name)
-	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, model_name=args.model_name)
+	train_set = SSTDataset(filename='data/train.tsv', maxlen=args.maxlen_train, model_name_or_path=args.model_name_or_path)
+	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, model_name_or_path=args.model_name_or_path)
 
 	train_loader = DataLoader(dataset=train_set, batch_size=args.batch_size, num_workers=args.num_threads)
 	val_loader = DataLoader(dataset=val_set, batch_size=args.batch_size, num_workers=args.num_threads)
