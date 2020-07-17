@@ -37,6 +37,7 @@ if __name__ == "__main__":
 
 	#Configuration for the desired transformer model
 	config = AutoConfig.from_pretrained(args.model_name_or_path)
+	
 	#Tokenizer for the desired transformer model
 	tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 	

@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoConfig
+from transformers import AutoConfig, AutoTokenizer
 from modeling import BertForSentimentClassification, AlbertForSentimentClassification, DistilBertForSentimentClassification
 from dataset import SSTDataset
 from arguments import args
@@ -36,6 +36,9 @@ if __name__ == "__main__":
 
 	#Configuration for the desired transformer model
 	config = AutoConfig.from_pretrained(args.model_name_or_path)
+
+	#Tokenizer for the desired transformer model
+	tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 	
 	#Create the model with the desired transformer model
 	if config.model_type == 'bert':
