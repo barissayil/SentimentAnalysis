@@ -5,7 +5,6 @@ Sentiment analysis neural network trained by fine tuning [BERT](https://arxiv.or
 ## Install requirements
 ```
 pip install numpy pandas torch transformers
-
 ```
 
 ## Analyze sentiments of your own inputs
