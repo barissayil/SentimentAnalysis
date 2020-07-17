@@ -24,8 +24,6 @@ if __name__ == "__main__":
 	if args.model_name_or_path == '':
 		args.model_name_or_path == 'barissayil/bert-sentiment-analysis-sst'
 	print('Please wait while the analyser is being prepared.')
-	#Configuration for the desired transformer model
-	config = AutoConfig.from_pretrained(args.model_name_or_path)
 	#Create the model with the desired transformer model
 	if args.model_type == 'bert':
 		model = BertForSentimentClassification.from_pretrained(model_name_or_path)
