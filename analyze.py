@@ -21,11 +21,15 @@ def classify_sentiment(sentence):
 			print('Negative with probability {}%.'.format(int(100-prob*100)))
 
 if __name__ == "__main__":
-	if args.model_name_or_path == '':
+
+	if args.model_name_or_path is None:
 		args.model_name_or_path = 'barissayil/bert-sentiment-analysis-sst'
+
 	#Configuration for the desired transformer model
 	config = AutoConfig.from_pretrained(args.model_name_or_path)
+
 	print('Please wait while the analyser is being prepared.')
+
 	#Create the model with the desired transformer model
 	if config.model_type == 'bert':
 		model = BertForSentimentClassification.from_pretrained(args.model_name_or_path)
@@ -33,13 +37,16 @@ if __name__ == "__main__":
 		model = AlbertForSentimentClassification.from_pretrained(args.model_name_or_path)
 	elif config.model_type == 'distilbert':
 		model = DistilBertForSentimentClassification.from_pretrained(args.model_name_or_path)
+
 	#CPU or GPU
 	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 	model = model.to(device)
 	
 	model.eval()
+
 	#Initialize the tokenizer for the desired transformer model
 	tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+	
 	sentence = input('Input sentiment to analyze: ')
 	while sentence:
 		classify_sentiment(sentence)

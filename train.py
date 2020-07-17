@@ -30,11 +30,12 @@ def train(model, criterion, optimizer, train_loader, val_loader, args):
 
 if __name__ == "__main__":
 
-	if args.model_name_or_path == '':
+	if args.model_name_or_path is None:
 		raise ValueError('Please specify the model name or path to train: --model_name_or_path {bert-base-uncased, albert-base-v2, distilbert-base-uncased}')
 
 	#Configuration for the desired transformer model
 	config = AutoConfig.from_pretrained(args.model_name_or_path)
+	
 	#Create the model with the desired transformer model
 	if config.model_type == 'bert':
 		model = BertForSentimentClassification.from_pretrained(args.model_name_or_path, config=config)
