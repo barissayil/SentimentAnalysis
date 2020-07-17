@@ -53,7 +53,7 @@ if __name__ == "__main__":
 	#Takes as the input the logits of the positive class and computes the binary cross-entropy 
 	criterion = nn.BCEWithLogitsLoss()
 
-	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, model_name_or_path=args.model_name_or_path)
+	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, tokenizer=tokenizer)
 	val_loader = DataLoader(dataset=val_set, batch_size=args.batch_size, num_workers=args.num_threads)
 	
 	val_acc, val_loss = evaluate(model=model, criterion=criterion, dataloader=val_loader, device=device)
