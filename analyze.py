@@ -1,5 +1,5 @@
 import torch
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, AutoConfig
 from modeling import BertForSentimentClassification, AlbertForSentimentClassification, DistilBertForSentimentClassification
 from arguments import args
 

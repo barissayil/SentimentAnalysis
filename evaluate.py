@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+from transformers import AutoConfig
 from modeling import BertForSentimentClassification, AlbertForSentimentClassification, DistilBertForSentimentClassification
 from dataset import SSTDataset
 from arguments import args

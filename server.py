@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 import torch
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, AutoConfig
 from modeling import BertForSentimentClassification, AlbertForSentimentClassification, DistilBertForSentimentClassification
 from arguments import args
 
