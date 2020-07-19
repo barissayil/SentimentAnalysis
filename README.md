@@ -18,7 +18,7 @@ python analyze.py
 ```
 python train.py --model_name_or_path bert-base-uncased --output_dir my_model --num_eps 2
 ```
-# bert-base-uncased, albert-base-v2, distilbert-base-uncased, and other similar models are supported.
+### bert-base-uncased, albert-base-v2, distilbert-base-uncased, and other similar models are supported.
 
 ## Evaluate the model that you have trained
 ```
