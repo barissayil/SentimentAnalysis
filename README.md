@@ -16,7 +16,7 @@ python analyze.py
 
 ## Train model
 ```
-python train.py --model_name_or_path bert-base-uncased --output_dir my_model --maxlen_train 20 --num_eps 1
+python train.py --model_name_or_path bert-base-uncased --output_dir my_model --num_eps 2
 ```
 
 ## Evaluate the model that you have trained
