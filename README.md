@@ -7,19 +7,24 @@ Sentiment analysis neural network trained by fine-tuning [BERT](https://arxiv.or
 pip install numpy pandas torch transformers
 ```
 
-## Analyze sentiments of your own inputs
+## Analyze your inputs with the model that I've uploaded on s3
 ```
 python analyze.py
 ```
 
-## Train network
+## Train model
 ```
-python train.py
+python train.py --batch_size 32 --lr 2e-5 --num_eps 1 --maxlen_train 20 --maxlen_val 50 --output_dir my_model
 ```
 
-## Evaluate network
+## Evaluate the model that you have trained
 ```
-python evaluate.py
+python evaluate.py --model_name_or_path my_model
+```
+
+## Analyze your inputs with the model you have trained
+```
+python analyze.py --model_name_or_path my_model
 ```
 
 ## Install requirements for server
@@ -29,7 +34,7 @@ pip install flask flask_cors
 
 ## Run server
 ```
-python server.py
+python server.py --model_name_or_path my_model
 ```
 
 ## Setup client
