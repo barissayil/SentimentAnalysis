@@ -29,7 +29,7 @@ python evaluate.py --model_name_or_path my_model
 python analyze.py --model_name_or_path my_model
 ```
 
-## Install requirements for server
+## Setup server
 ```
 pip install flask flask_cors
 ```
