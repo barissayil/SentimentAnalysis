@@ -14,7 +14,7 @@ python analyze.py
 
 ## Train model
 ```
-python train.py --batch_size 32 --lr 2e-5 --num_eps 1 --maxlen_train 20 --maxlen_val 50 --output_dir my_model
+python train.py --lr 2e-5 --num_eps 1 --maxlen_train 20 --maxlen_val 50 --output_dir my_model
 ```
 
 ## Evaluate the model that you have trained
