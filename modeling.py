@@ -40,7 +40,7 @@ class AlbertForSentimentClassification(AlbertPreTrainedModel):
 			(where B is the batch size and T is the input length)
 		'''
 		#Feed the input to Albert model to obtain outputs
-		outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
+		outputs = self.albert(input_ids=input_ids, attention_mask=attention_mask)
 		#Obtain the representations of [CLS] heads
 		cls_reps = outputs.last_hidden_state[:, 0]
 		logits = self.cls_layer(cls_reps)
@@ -61,7 +61,7 @@ class DistilBertForSentimentClassification(DistilBertPreTrainedModel):
 			(where B is the batch size and T is the input length)
 		'''
 		#Feed the input to DistilBert model to obtain outputs
-		outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
+		outputs = self.distilbert(input_ids=input_ids, attention_mask=attention_mask)
 		#Obtain the representations of [CLS] heads
 		cls_reps = outputs.last_hidden_state[:, 0]
 		logits = self.cls_layer(cls_reps)
