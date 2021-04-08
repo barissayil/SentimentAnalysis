@@ -17,10 +17,10 @@ class BertForSentimentClassification(BertPreTrainedModel):
 			-attention_mask : Tensor of shape [B, T] containing attention masks to be used to avoid contibution of PAD tokens
 			(where B is the batch size and T is the input length)
 		'''
-		#Feed the input to Bert model to obtain contextualized representations
-		reps, _ = self.bert(input_ids=input_ids, attention_mask=attention_mask)
+		#Feed the input to Bert model to obtain outputs
+		outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
 		#Obtain the representations of [CLS] heads
-		cls_reps = reps[:, 0]
+		cls_reps = outputs.last_hidden_state[:, 0]
 		# cls_reps = self.dropout(cls_reps)
 		logits = self.cls_layer(cls_reps)
 		return logits
@@ -39,10 +39,10 @@ class AlbertForSentimentClassification(AlbertPreTrainedModel):
 			-attention_mask : Tensor of shape [B, T] containing attention masks to be used to avoid contibution of PAD tokens
 			(where B is the batch size and T is the input length)
 		'''
-		#Feed the input to Albert model to obtain contextualized representations
-		reps, _ = self.albert(input_ids=input_ids, attention_mask=attention_mask)
+		#Feed the input to Albert model to obtain outputs
+		outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
 		#Obtain the representations of [CLS] heads
-		cls_reps = reps[:, 0]
+		cls_reps = outputs.last_hidden_state[:, 0]
 		logits = self.cls_layer(cls_reps)
 		return logits
 
@@ -60,9 +60,9 @@ class DistilBertForSentimentClassification(DistilBertPreTrainedModel):
 			-attention_mask : Tensor of shape [B, T] containing attention masks to be used to avoid contibution of PAD tokens
 			(where B is the batch size and T is the input length)
 		'''
-		#Feed the input to DistilBert model to obtain contextualized representations
-		reps, = self.distilbert(input_ids=input_ids, attention_mask=attention_mask)
+		#Feed the input to DistilBert model to obtain outputs
+		outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
 		#Obtain the representations of [CLS] heads
-		cls_reps = reps[:, 0]
+		cls_reps = outputs.last_hidden_state[:, 0]
 		logits = self.cls_layer(cls_reps)
 		return logits
