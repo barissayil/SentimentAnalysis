@@ -3,4 +3,4 @@ pandas==0.25.0
 numpy==1.17.4
 transformers==3.0.1
 flask==1.1.1
-flask_cors==3.0.8
+flask_cors==3.0.9
