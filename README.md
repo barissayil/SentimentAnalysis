@@ -4,50 +4,76 @@ Sentiment analysis neural network trained by fine-tuning [BERT](https://arxiv.or
 
 ![https://i.imgur.com/XPQFCix.mp4](https://github.com/barissayil/SentimentAnalysis/blob/master/public/analyze.gif)
 
-## Install requirements
+## Setup Sentiment Analysis
+
+### Clone Sentiment Analysis, update lists of packages, install Pyton 3.9
 ```
-pip install numpy pandas torch transformers
+git clone https://github.com/barissayil/SentimentAnalysis.git
+cd SentimentAnalysis
+sudo apt-get update
+sudo apt-get install python3.9
 ```
 
-## Analyze your inputs with the model that I've uploaded on s3
+### Verify that you have Python 3.9.10
+```
+python3.9 --version
+```
+
+### Create virtual environment with Python 3.9.10 binary, activate it
+```
+python3.9 -m venv env
+source env/bin/activate
+```
+
+### Install necessary packages
+```
+pip install -r requirements.txt
+```
+
+### Test it and verify that it passes all tests
+```
+python -m pytest
+```
+
+## Use Sentiment Analysis with my model
+
+### Evaluate
+```
+python evaluate.py
+```
+
+### Analyze your inputs
 ```
 python analyze.py
 ```
 
-## Train model
+### Run server, and verify that you get back 99% positive
 ```
-python train.py --model_name_or_path bert-base-uncased --output_dir my_model --num_eps 2
+python server.py
+```
+```
+curl localhost:5000 -G -d text=good
+```
+
+## Train your own model and use Sentiment Analysis with it
+
+### Train (i.e.fine-tune) BERT
+```
+python train.py --model_name_or_path bert-base-uncased --output_dir XXX --num_eps 2
 ```
 *bert-base-uncased, albert-base-v2, distilbert-base-uncased, and other similar models are supported.*
 
-## Evaluate the model that you have trained
+### Evaluate
 ```
-python evaluate.py --model_name_or_path my_model
-```
-
-## Analyze your inputs with the model you have trained
-```
-python analyze.py --model_name_or_path my_model
+python evaluate.py --model_name_or_path XXX
 ```
 
-## Setup server
+### Analyze your inputs
 ```
-pip install flask flask_cors
-```
-
-## Run server
-```
-python server.py --model_name_or_path my_model
+python analyze.py --model_name_or_path XXX
 ```
 
-## Setup client
+### Run server
 ```
-cd client
-npm install
-```
-
-## Run client
-```
-cd client
-npm run serve
+python server.py --model_name_or_path XXX
 ```
