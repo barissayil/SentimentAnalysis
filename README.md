@@ -36,7 +36,7 @@ python -m pytest
 
 ## Use Sentiment Analysis with my model
 
-## Evaluate
+### Evaluate
 ```
 python evaluate.py
 ```
@@ -46,7 +46,7 @@ python evaluate.py
 python analyze.py
 ```
 
-## Run server, and verify that you get back 99% positive
+### Run server, and verify that you get back 99% positive
 ```
 python server.py
 ```
@@ -56,13 +56,13 @@ curl localhost:5000 -G -d text=good
 
 ## Train your own model and use Sentiment Analysis with it
 
-## Train (i.e.fine-tune) BERT
+### Train (i.e.fine-tune) BERT
 ```
 python train.py --model_name_or_path bert-base-uncased --output_dir XXX --num_eps 2
 ```
 *bert-base-uncased, albert-base-v2, distilbert-base-uncased, and other similar models are supported.*
 
-## Evaluate
+### Evaluate
 ```
 python evaluate.py --model_name_or_path XXX
 ```
@@ -72,7 +72,7 @@ python evaluate.py --model_name_or_path XXX
 python analyze.py --model_name_or_path XXX
 ```
 
-## Run server
+### Run server
 ```
 python server.py --model_name_or_path XXX
 ```
