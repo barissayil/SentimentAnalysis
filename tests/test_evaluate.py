@@ -20,5 +20,5 @@ def test_evaluate():
 	val_loader = DataLoader(dataset=val_set, batch_size=args.batch_size, num_workers=args.num_threads)
 	val_accuracy, val_loss = analyzer.evaluate(val_loader=val_loader, criterion=criterion)
 	
-	assert val_accuracy == 0.921875
-	assert val_loss == 5.729034848511219
+	assert round(val_accuracy * 100) == 92
+	assert round(val_loss) == 6
