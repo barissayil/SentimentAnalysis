@@ -1,5 +1,6 @@
 import torch
 
+
 def get_accuracy_from_logits(logits, labels):
 	# Convert logits to probabilties
 	probabilties = torch.sigmoid(logits.unsqueeze(-1))

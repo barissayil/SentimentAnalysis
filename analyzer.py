@@ -5,6 +5,7 @@ from tqdm import tqdm
 from modeling import BertForSentimentClassification, AlbertForSentimentClassification, DistilBertForSentimentClassification
 from utils import get_accuracy_from_logits
 
+
 class Analyzer():
 	def __init__(self, will_train, args):
 
@@ -42,7 +43,7 @@ class Analyzer():
 
 		# Set output directory.
 		self.output_dir = args.output_dir
-	
+
 	# Evaluates analyzer.
 	def evaluate(self, val_loader, criterion):
 		# Set model to evaluation mode.
@@ -67,7 +68,7 @@ class Analyzer():
 		accuracy = batch_accuracy_summation / num_batches
 		# Return accuracy and loss.
 		return accuracy.item(), loss
-	
+
 	# Trains analyzer for one epoch.
 	def train(self, train_loader, optimizer, criterion):
 		# Set model to training mode.
@@ -86,7 +87,7 @@ class Analyzer():
 			loss.backward()
 			# Optimize the model.
 			optimizer.step()
-	
+
 	# Saves analyzer.
 	def save(self):
 		# Save model.
@@ -111,11 +112,11 @@ class Analyzer():
 			# Convert the logit to a probability.
 			positive_probability = torch.sigmoid(positive_logit.unsqueeze(-1)).item()
 			# Convert the probability to a percentage.
-			positive_percentage = positive_probability*100
+			positive_percentage = positive_probability * 100
 			# Conver probability to boolean.
 			is_positive = positive_probability > 0.5
 			# Return sentiment and percentage.
 			if is_positive:
 				return 'Positive', int(positive_percentage)
 			else:
-				return 'Negative', int(100-positive_percentage)
+				return 'Negative', int(100 - positive_percentage)

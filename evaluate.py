@@ -17,7 +17,7 @@ if __name__ == "__main__":
 	# Initialize validation set and loader.
 	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, tokenizer=analyzer.tokenizer)
 	val_loader = DataLoader(dataset=val_set, batch_size=args.batch_size, num_workers=args.num_threads)
-	
+
 	# Evaluate analyzer and get accuracy + loss.
 	val_accuracy, val_loss = analyzer.evaluate(val_loader=val_loader, criterion=criterion)
 

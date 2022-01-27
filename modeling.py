@@ -1,6 +1,7 @@
 import torch.nn as nn
 from transformers import BertPreTrainedModel, BertModel, AlbertPreTrainedModel, AlbertModel, DistilBertPreTrainedModel, DistilBertModel
 
+
 class BertForSentimentClassification(BertPreTrainedModel):
 	def __init__(self, config):
 		super().__init__(config)
@@ -25,6 +26,7 @@ class BertForSentimentClassification(BertPreTrainedModel):
 		# Return logits.
 		return logits
 
+
 class AlbertForSentimentClassification(AlbertPreTrainedModel):
 	def __init__(self, config):
 		super().__init__(config)
@@ -44,6 +46,7 @@ class AlbertForSentimentClassification(AlbertPreTrainedModel):
 		logits = self.cls_layer(cls_reps)
 		return logits
 
+
 class DistilBertForSentimentClassification(DistilBertPreTrainedModel):
 	def __init__(self, config):
 		super().__init__(config)
@@ -62,6 +65,3 @@ class DistilBertForSentimentClassification(DistilBertPreTrainedModel):
 		cls_reps = outputs.last_hidden_state[:, 0]
 		logits = self.cls_layer(cls_reps)
 		return logits
-
-
-

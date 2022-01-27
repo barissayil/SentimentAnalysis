@@ -15,6 +15,7 @@ args.num_threads = 1
 # Initialize tokenizer for BERT.
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 
+
 def test_train_set():
 	train_set = SSTDataset(filename='data/train.tsv', maxlen=args.maxlen_train, tokenizer=tokenizer)
 	assert isinstance(train_set, SSTDataset)
@@ -29,7 +30,7 @@ def test_train_set():
 	assert attention_mask.size() == torch.Size([args.batch_size, args.maxlen_train])
 	assert labels.size() == torch.Size([args.batch_size])
 
-  
+
 def test_val_set():
 	val_set = SSTDataset(filename='data/dev.tsv', maxlen=args.maxlen_val, tokenizer=tokenizer)
 	assert isinstance(val_set, SSTDataset)
