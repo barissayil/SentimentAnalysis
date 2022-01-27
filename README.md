@@ -9,6 +9,7 @@ Sentiment analysis neural network trained by fine-tuning [BERT](https://arxiv.or
 ### Clone Sentiment Analysis, update lists of packages, install Pyton 3.9
 ```
 git clone https://github.com/barissayil/SentimentAnalysis.git
+cd SentimentAnalysis
 sudo apt-get update
 sudo apt-get install python3.9
 ```
